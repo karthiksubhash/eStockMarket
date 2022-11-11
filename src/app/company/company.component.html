@@ -1,0 +1,74 @@
+<div class="company" *ngIf="companies">
+    <mat-card class="mat-elevation-z0">
+        <mat-card-title style="text-align: center;">Company Info</mat-card-title>
+        <div class="row">
+            <mat-card-actions class="pl-2 mt-3">
+              <!--  <button mat-raised-button color="primary" mat-button (click)="openDialog()">
+                    <mat-icon>add_circle</mat-icon>Add Company
+                </button>-->
+                <button mat-raised-button color="primary" mat-button [matMenuTriggerFor]="menu">
+                    <mat-icon>menu</mat-icon>List Companies
+                </button>
+            </mat-card-actions>
+            <div class="col">
+                <form class="row row-cols-sm-auto">
+                    <div class="col-3 mt-4">
+                        <div class="input-group">
+                            <span class="mt-2 mr-1">From : </span>
+                            <input class="form-control" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker
+                                #from="ngbDatepicker" (dateSelect)="onDateSelect($event,true)" />
+                            <button class="btn btn-outline-primary ml-1 px-1 py-0" (click)="from.toggle()"
+                                type="button">
+                                <mat-icon>calendar_today</mat-icon>
+                            </button>
+                        </div>
+                    </div>
+                    <timepicker (ngModelChange)="onDateSelect('',false,true)" [(ngModel)]="fromTime" [ngModelOptions]="{standalone: true}"></timepicker>
+                    <div class="col-3 mt-4">
+                        <div class="input-group">
+                            <span class="mt-2 mr-1">To : </span>
+                            <input class="form-control" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker
+                                #to="ngbDatepicker" (dateSelect)="onDateSelect($event)"/>
+                            <button class="btn btn-outline-primary ml-1 px-1 py-0" (click)="to.toggle()" type="button">
+                                <mat-icon>calendar_today</mat-icon>
+                            </button>
+                        </div>
+                    </div>
+                    <timepicker (ngModelChange)="onDateSelect('',false,true)" [(ngModel)]="toTime" [ngModelOptions]="{standalone: true}"></timepicker>
+                </form>
+            </div>
+            <form class="example-form col-2 mt-3">
+                <mat-form-field class="example-full-width" appearance="fill">
+                    <mat-label>
+                        <mat-icon>search</mat-icon> Search Company code
+                    </mat-label>
+                    <input type="text" placeholder="Search" aria-label="Number" matInput [formControl]="myControl"
+                        [matAutocomplete]="auto">
+                    <mat-autocomplete #auto="matAutocomplete">
+                        <mat-option *ngFor="let option of filteredOptions | async" [value]="option" (click)="selectCompany(option)">
+                            {{option}}
+                        </mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
+            </form>
+        </div>
+        <div>
+            <table>
+                <tr>
+                    <th>Company code</th>
+                    <th>Company name</th>
+                </tr>
+                <tr>
+                    <td>{{selectedCompany.id}}</td>
+                    <td>{{selectedCompany.companyName}}</td>
+                </tr>
+            </table>
+        </div>
+    </mat-card>
+</div>
+<mat-menu #menu="matMenu" style="height: 400px;">
+    <p mat-menu-item *ngFor="let company of companies;" (click)="selectCompany(company.id)">
+      <span>{{company.companyName}}</span>
+    </p>
+</mat-menu>
+<app-mat-table *ngIf="companies" [data]="selectedCompany"></app-mat-table>
